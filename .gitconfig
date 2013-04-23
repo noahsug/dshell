@@ -1,0 +1,24 @@
+[user]
+	name = sugarman
+	email = sugarman@google.com
+[alias]
+	cm = commit
+	ca = commit -am
+	co = checkout
+	br = branch
+	cp = cherry-pick
+	di = diff
+	st = status
+	ft = fetch
+	pl = pull
+        lg = log
+        sh = show
+	tree = log --oneline --decorate --graph
+        qlg = log --oneline -15
+        qdi = diff --name-only
+        qsh = show --name-only
+[color]
+	ui = auto
+[core]
+	autocrlf = false
+	filemode = false
