@@ -15,7 +15,7 @@ complete -o bashdefault -o default -o nospace -F _git g 2>/dev/null \
 # ls colors
 export LS_COLORS='di=38;5;108:fi=00:*svn-commit.tmp=31:ln=38;5;116:ex=38;5;186'
 export CLICOLOR=1
-export LSCOLORS=dxHxCxFxBxegedabagaced
+export LSCOLORS=dxhxcxfxbxegedabagaced
 
 # PS1
 case $TERM in
@@ -66,4 +66,10 @@ alias di="diff"
 bind "C-p":history-search-backward
 bind "C-n":history-search-forward
 
-. ~/.bashrc.d/commands.sh
+# edit shortcuts
+alias 0ebrc="e ~/.bashrc"
+alias 0eb="e ~/.bashrc.d/sug/main.sh"
+alias 0ee="e ~/.emacs.d/personal/sug/main.el"
+alias 0eg="e ~/.gitconfig"
+
+. ~/.bashrc.d/sug/"$(hostname).sh"
