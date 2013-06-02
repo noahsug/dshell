@@ -5,7 +5,7 @@
 ;; Adds aliases, shortcuts and prelude preferences.
 
 ;;; Code:
-;; key bindings
+;; general key bindings
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "C-x h") 'help-command)
 (global-set-key (kbd "M-p") (kbd "M-5 C-p"))
@@ -18,7 +18,14 @@
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-j") 'hippie-expand)
 (global-set-key (kbd "C-M-j") 'pabbrev-scavenge-buffer-fast)
+(global-set-key (kbd "C-M-z") (lambda (char) (interactive "cZap to char backwards: ") (zap-to-char -1 char)))
+(global-set-key (kbd "C-M-Z") (lambda (char) (interactive "cZap up to char backwards: ") (zap-up-to-char -1 char)))
+(global-set-key (kbd "C-x C-p") (kbd "C-x p"))
+(global-set-key (kbd "C-x C-o") (kbd "C-x o"))
+(global-set-key (kbd "C-x C-k") (kbd "C-x k"))
+(global-set-key (kbd "C-x C-z") (kbd "C-x z"))
 
+;; projectile key bindings
 (global-set-key (kbd "C-c j") 'projectile-test-project)
 (global-set-key (kbd "C-c C-j") 'projectile-test-project)
 (global-set-key (kbd "C-x C-j") 'projectile-test-project)
@@ -34,35 +41,13 @@
 (global-set-key (kbd "C-c C-f") 'projectile-find-file)
 
 (global-set-key (kbd "C-c K") 'projectile-kill-buffers)
-(global-set-key (kbd "C-c C-K") 'projectile-kill-buffers)
 
 (global-set-key (kbd "C-c R") 'projectile-replace)
-(global-set-key (kbd "C-c C-R") 'projectile-replace)
 
 (global-set-key (kbd "C-c S") 'projectile-switch-project)
-(global-set-key (kbd "C-c C-S") 'projectile-switch-project)
 
 (global-set-key (kbd "C-c t") 'projectile-toggle-between-implemenation-and-test)
 (global-set-key (kbd "C-c C-t") 'projectile-toggle-between-implemenation-and-test)
-
-(global-set-key (kbd "C-M-z") (lambda (char) (interactive "cZap to char backwards: ") (zap-to-char -1 char)))
-
-(global-set-key (kbd "C-M-Z") (lambda (char) (interactive "cZap up to char backwards: ") (zap-up-to-char -1 char)))
-
-;(global-set-key (kbd "C-c c") (kbd "C-c p p"))
-;(global-set-key (kbd "C-c l") (kbd "C-c p l"))
-;(global-set-key (kbd "C-c a") (kbd "C-c p a"))
-;(global-set-key (kbd "C-c f") (kbd "C-c p f"))
-;(global-set-key (kbd "C-c K") (kbd "C-c p k"))
-;(global-set-key (kbd "C-c R") (kbd "C-c p r"))
-;(global-set-key (kbd "C-c S") (kbd "C-c p s"))
-;(global-set-key (kbd "C-c t") (kbd "C-c p t"))
-
-;; aliases
-(global-set-key (kbd "C-x C-p") (kbd "C-x p"))
-(global-set-key (kbd "C-x C-o") (kbd "C-x o"))
-(global-set-key (kbd "C-x C-k") (kbd "C-x k"))
-(global-set-key (kbd "C-x C-z") (kbd "C-x z"))
 
 ;; refresh file
 (defun refresh-file ()
@@ -73,6 +58,9 @@
 ;; allow arrow keys
 (setq prelude-guru nil)
 
+;; follow symlinks and don't ask
+(setq vc-follow-symlinks t)
+
 ;; disable menu bar
 (menu-bar-mode 0)
 
@@ -82,7 +70,7 @@
 (global-set-key [(control meta m)] 'jump-char-backward)
 
 ;; revbufs
-(require 'revbufs "~/.emacs.d/personal/sug/jump-char/revbufs.el")
+(require 'revbufs "~/.emacs.d/personal/sug/revbufs.el")
 (global-set-key (kbd "C-x r a") 'revbufs)
 
 ;; fix for "lisp nesting exceeds `max-lisp-eval-depth'" error
@@ -104,8 +92,6 @@
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
-(test-suffix)
 
 (provide 'sug)
 ;;; sug.el ends here
