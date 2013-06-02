@@ -17,5 +17,7 @@ b:
 	ln -s $$(pwd)/bash ~/.bashrc.d/sug
 
 e:
+	-rm -r ~/.emacs.d/personal/sug
 	-rm ~/.emacs.d/personal/sug.el
 	ln -s $$(pwd)/emacs/sug.el ~/.emacs.d/personal/sug.el
+	ln -s $$(pwd)/emacs/sug ~/.emacs.d/personal/sug

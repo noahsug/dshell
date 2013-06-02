@@ -44,7 +44,6 @@ function dia() {
 }
 
 # emacs stuff
-emacs --daemon
 EDITOR="emacsclient -t"
 VISUAL="emacsclient -t"
 
@@ -52,8 +51,8 @@ VISUAL="emacsclient -t"
 alias g5="git5"
 alias g="git"
 alias e="emacsclient -t -a emacs -nw"
+alias es="killall emacs ; emacs --daemon"
 alias en="killall emacs ; emacs --daemon ; emacsclient -t -a emacs -nw"
-alias kille="killall emacs"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -69,7 +68,7 @@ bind "C-n":history-search-forward
 # edit shortcuts
 alias 0ebrc="e ~/.bashrc"
 alias 0eb="e ~/.bashrc.d/sug/main.sh"
-alias 0ee="e ~/.emacs.d/personal/sug/main.el"
+alias 0ee="e ~/.emacs.d/personal/sug.el"
 alias 0eg="e ~/.gitconfig"
 
 . ~/.bashrc.d/sug/"$(hostname).sh"
