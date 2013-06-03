@@ -1,8 +1,9 @@
+# DShell
 A simple emacs/git/bash environment that runs from Dropbox so all your computers have the latest development environment.
 
 **Requires emacs version 24.**
 
-# Installation
+## Installation
 
 **Run `make install` then add the following to your .bashrc: `. ~/.bashrc.d/sug/main.sh`**
 
@@ -10,8 +11,8 @@ It's recommened that you clone this repository inside Dropbox for easy sharing a
 
 You can add computer specific bash configurations by adding the file "bash/\<hostname\>.sh" where \<hostname\> is the hostname of your computer.
 
-## Trouble shotting
+### Trouble shotting
 If you have problems installing prelude, check out https://github.com/bbatsov/prelude for OS specific instructions.
 
-### Mac OS X Terminal
+#### Mac OS X Terminal
 Install the zenburn.terminal file form this repo to get the sexy zenburn theme (default theme for prelude).
