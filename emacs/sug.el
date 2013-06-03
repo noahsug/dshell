@@ -55,6 +55,9 @@
   (revert-buffer t t t)
 )
 
+;; don't word wrap
+(setq toggle-truncate-lines nil)
+
 ;; allow arrow keys
 (setq prelude-guru nil)
 
@@ -72,6 +75,10 @@
 ;; revbufs
 (require 'revbufs "~/.emacs.d/personal/sug/revbufs.el")
 (global-set-key (kbd "C-x r a") 'revbufs)
+
+;; flycheck
+(require 'flycheck "~/.emacs.d/personal/sug/flycheck.el")
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; fix for "lisp nesting exceeds `max-lisp-eval-depth'" error
 (setq max-lisp-eval-depth 1000)
