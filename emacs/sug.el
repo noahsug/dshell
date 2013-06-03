@@ -67,6 +67,9 @@
 ;; disable menu bar
 (menu-bar-mode 0)
 
+;; highlight current line
+(set-face-background 'hl-line "#444")
+
 ;; jump-char
 (require 'jump-char "~/.emacs.d/personal/sug/jump-char/jump-char.el")
 (global-set-key [(meta m)] 'jump-char-forward)
@@ -77,8 +80,8 @@
 (global-set-key (kbd "C-x r a") 'revbufs)
 
 ;; flycheck
-(require 'flycheck "~/.emacs.d/personal/sug/flycheck.el")
-(add-hook 'after-init-hook #'global-flycheck-mode)
+;(require 'flycheck "~/.emacs.d/personal/sug/flycheck.el")
+;(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; fix for "lisp nesting exceeds `max-lisp-eval-depth'" error
 (setq max-lisp-eval-depth 1000)
