@@ -17,9 +17,8 @@
 (global-set-key (kbd "C-x r e") 'refresh-file)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-j") 'hippie-expand)
-(global-set-key (kbd "C-M-j") 'pabbrev-scavenge-buffer-fast)
-(global-set-key (kbd "C-M-z") (lambda (char) (interactive "cZap to char backwards: ") (zap-to-char -1 char)))
-(global-set-key (kbd "C-M-Z") (lambda (char) (interactive "cZap up to char backwards: ") (zap-up-to-char -1 char)))
+;(global-set-key (kbd "C-M-z") (lambda (char) (interactive "cZap to char backwards: ") (zap-to-char -1 char)))
+;(global-set-key (kbd "C-M-Z") (lambda (char) (interactive "cZap up to char backwards: ") (zap-up-to-char -1 char)))
 (global-set-key (kbd "C-x C-p") (kbd "C-x p"))
 (global-set-key (kbd "C-x C-o") (kbd "C-x o"))
 (global-set-key (kbd "C-x C-k") (kbd "C-x k"))
@@ -102,6 +101,32 @@
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+;; helper functions
+(defun delete-line ()
+  "Deletes the current line without putting it into the kill ring."
+  (delete-region (line-beginning-position) (line-end-position)))
+
+;; expands a phrase to fit into a template
+(defun template-expand ()
+  "Expand a line into a template."
+  (interactive)
+  (let (phrase)
+    (setq phrase
+      (replace-regexp-in-string "\n" "" (thing-at-point 'line)))
+    (cond
+
+      ((string-match "^class\s\\w+" phrase)
+        "Coffeescript + node.js class expansion."
+        (let (className)
+          (setq className (elt (split-string phrase " ") 1))
+          (delete-line)
+          (insert (format
+              "exports.%s = class %s\n  " className className))))
+
+      (t
+        (message "unknown phrase \"%s\"" phrase)))))
+(global-set-key (kbd "M-j") template-expand)
 
 (provide 'sug)
 ;;; sug.el ends here
