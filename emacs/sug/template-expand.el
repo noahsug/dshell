@@ -23,38 +23,39 @@
                              t nil s)))
     (downcase s)))
 
+(defun replace-line (text)
+  "Replace the text in the current line with TEXT."
+  (delete-line)
+  (insert text))
+
 (defun template-expand ()
   "Expand a line into a template."
   (interactive)
-  (let (phrase)
+  (let (phrase args)
     (setq phrase
           (replace-regexp-in-string "\n" "" (thing-at-point 'line)))
+    (setq args (split-string phrase " "))
     (cond
 
      ((string-match "^class\s\\w+" phrase)
       "Coffeescript + node.js class expansion."
-      (let (className)
-        (setq className (elt (split-string phrase " ") 1))
-        (delete-line)
-        (insert (format
-                 "exports.%s = class %s\n  " className className))))
+      (let ((className (elt args 1)))
+        (replace-line
+         (format "exports.%s = class %s\n  " className))))
 
      ((string-match "^req\s\\w+" phrase)
       "Coffeescript + node.js require."
-      (let (className)
-        (setq className (elt (split-string phrase " ") 1))
-        (delete-line)
-        (insert (format
-                 "{%s} = require \"%s.coffee\"" className (un-camelcase className)))))
+      (let ((className (elt args 1)))
+        (replace-line
+         (format "{%s} = require \"%s.coffee\""
+                 className (un-camelcase className)))))
 
      ((string-match "^req\s\\.\\.\\w+" phrase)
       "Coffeescript + node.js require."
-      (let (className)
-        (setq className
-              (substring (elt (split-string phrase " ") 1) 3 nil))
-        (delete-line)
-        (insert (format
-                 "{%s} = require \"../coffee/%s.coffee\"" className (un-camelcase className)))))
+      (let ((className (substring (elt args 1) 2 nil)))
+        (replace-line
+         (format "{%s} = require \"../coffee/%s.coffee\""
+                 className (un-camelcase className)))))
 
      (t
       (message "unknown phrase \"%s\"" phrase)))))
