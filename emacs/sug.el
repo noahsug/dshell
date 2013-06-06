@@ -80,6 +80,10 @@
 (global-set-key (kbd "C-c t") 'swap-impl-test)
 (global-set-key (kbd "C-c C-t") 'swap-impl-test)
 
+;; expands a phrase to fit into a template
+(require 'template-expand "~/.emacs.d/personal/sug/template-expand.el")
+(global-set-key (kbd "M-j") 'template-expand)
+
 ;; flycheck
 ;(require 'flycheck "~/.emacs.d/personal/sug/flycheck.el")
 ;(add-hook 'after-init-hook #'global-flycheck-mode)
@@ -103,58 +107,6 @@
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
-;; helper functions
-(defun delete-line ()
-  "Deletes the current line without putting it into the kill ring."
-  (delete-region (line-beginning-position) (line-end-position)))
-
-(defun un-camelcase (s &optional sep &optional start)
-  "Convert CamelCase string to lower case with separator."
-  (let ((case-fold-search nil))
-    (while (string-match "[A-Z]" s (or start 1))
-      (setq s (replace-match (concat (or sep "_")
-        (downcase (match-string 0 s)))
-        t nil s)))
-    (downcase s)))
-
-;; expands a phrase to fit into a template
-(defun template-expand ()
-  "Expand a line into a template."
-  (interactive)
-  (let (phrase)
-    (setq phrase
-      (replace-regexp-in-string "\n" "" (thing-at-point 'line)))
-    (cond
-
-      ((string-match "^class\s\\w+" phrase)
-        "Coffeescript + node.js class expansion."
-        (let (className)
-          (setq className (elt (split-string phrase " ") 1))
-          (delete-line)
-          (insert (format
-              "exports.%s = class %s\n  " className className))))
-
-      ((string-match "^req\s\\w+" phrase)
-        "Coffeescript + node.js require."
-        (let (className)
-          (setq className (elt (split-string phrase " ") 1))
-          (delete-line)
-          (insert (format
-              "{%s} = require \"%s.coffee\"\n" className (un-camelcase className)))))
-
-      ((string-match "^req\s\\.\\./\\w+" phrase)
-       "Coffeescript + node.js require."
-       (let (className)
-         (setq className
-             (substring (elt (split-string phrase " ") 1) 3 nil))
-         (delete-line)
-         (insert (format
-                  "{%s} = require \"../coffee/%s.coffee\"\n" className (un-camelcase className)))))
-
-      (t
-        (message "unknown phrase \"%s\"" phrase)))))
-(global-set-key (kbd "M-j") template-expand)
 
 (provide 'sug)
 ;;; sug.el ends here
