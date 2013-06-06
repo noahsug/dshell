@@ -45,9 +45,6 @@
 
 (global-set-key (kbd "C-c S") 'projectile-switch-project)
 
-(global-set-key (kbd "C-c t") 'projectile-toggle-between-implemenation-and-test)
-(global-set-key (kbd "C-c C-t") 'projectile-toggle-between-implemenation-and-test)
-
 ;; refresh file
 (defun refresh-file ()
   (interactive)
@@ -77,6 +74,11 @@
 ;; revbufs
 (require 'revbufs "~/.emacs.d/personal/sug/revbufs.el")
 (global-set-key (kbd "C-x r a") 'revbufs)
+
+;; switch to corresponding test/impl file
+(require 'swap-impl-test "~/.emacs.d/personal/sug/swap-impl-test.el")
+(global-set-key (kbd "C-c t") 'swap-impl-test)
+(global-set-key (kbd "C-c C-t") 'swap-impl-test)
 
 ;; flycheck
 ;(require 'flycheck "~/.emacs.d/personal/sug/flycheck.el")

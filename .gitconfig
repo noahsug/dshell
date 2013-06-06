@@ -2,6 +2,8 @@
 	name = sugarman
 	email = sugarman@google.com
 [alias]
+        rbm = rebase master
+	rb = rebase
 	cm = commit
 	ca = commit -am
 	co = checkout
@@ -17,7 +19,7 @@
         qlg = log --oneline -15
         qdi = diff --name-only
         qsh = show --name-only
-[color]
+[color]1;2c
 	ui = auto
 [core]
 	autocrlf = false
