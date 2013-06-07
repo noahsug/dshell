@@ -41,7 +41,7 @@
       "Coffeescript + node.js class expansion."
       (let ((className (elt args 1)))
         (replace-line
-         (format "exports.%s = class %s\n  " className))))
+         (format "exports.%s = class %s\n  " className className))))
 
      ((string-match "^req\s\\w+" phrase)
       "Coffeescript + node.js require."
