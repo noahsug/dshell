@@ -36,17 +36,21 @@
      (concat (regexp-quote (format "%s/%s" fileExtension (buffer-name))) "$")
      (format "%s/%s_%s.%s" testSuffix fileName testSuffix fileExtension)
      (buffer-file-name)))
-   (t "bad name")))
+   (t nil)))
 
 (defun swap-impl-test (&optional testSuffix)
   "Swap between the implementation file and test file ; create if non-existent.
 The default for TESTSUFFIX is 'spec'."
   (interactive)
   (let (fileName fileExtension nextFile)
-    (string-match "^\\([a-zA-Z]+\\).*\\.\\(\\w+\\)$" (buffer-name))
-    (setq fileName (match-string 1 (buffer-name)))
-    (setq fileExtension (match-string 2 (buffer-name)))
+    (string-match
+     (format "^\\([a-zA-Z_]+\\)\\.\\(\\w+\\)$" testSuffix)
+     (buffer-name))
     (setq testSuffix (or testSuffix "spec"))
+    (setq fileName
+          (replace-regexp-in-string
+           (format "_%s$" testSuffix) "" (match-string 1 (buffer-name))))
+    (setq fileExtension (match-string 2 (buffer-name)))
     (setq nextFile (get-file-to-swap fileName fileExtension testSuffix))
     (cond
      ((string-equal nextFile (buffer-file-name))
@@ -55,6 +59,14 @@ The default for TESTSUFFIX is 'spec'."
       (find-file nextFile))
      (t
       (message "can't find test/impl file: invalid file name")))))
+
+
+(replace-regexp-in-string
+ (format "_%s$" "spec") "" "user_input_spec")
+
+(string-match
+ (format "^\\([a-zA-Z_]+\\)\\(_%s\\)?\\.\\(\\w+\\)$" "spec")
+ "user_input_spec.coffee")
 
 (provide 'swap-impl-test)
 ;;; swap-impl-test.el ends here

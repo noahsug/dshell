@@ -51,6 +51,9 @@
   (revert-buffer t t t)
 )
 
+;; disable version control
+(setq vc-handled-backends ())
+
 ;; don't word wrap
 (setq toggle-truncate-lines nil)
 
@@ -87,6 +90,14 @@
 ;; flycheck
 ;(require 'flycheck "~/.emacs.d/personal/sug/flycheck.el")
 ;(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; subword mode
+(add-hook 'js2-mode-hook 'subword-mode)
+(add-hook 'coffee-mode-hook 'subword-mode)
+(add-hook 'python-mode-hook 'subword-mode)
+
+;; use aspell instead of ispell
+;(setq ispell-list-command "--list")
 
 ;; fix for "lisp nesting exceeds `max-lisp-eval-depth'" error
 (setq max-lisp-eval-depth 1000)

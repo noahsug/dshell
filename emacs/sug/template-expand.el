@@ -47,13 +47,6 @@
       "Coffeescript + node.js require."
       (let ((className (elt args 1)))
         (replace-line
-         (format "{%s} = require \"%s.coffee\""
-                 className (un-camelcase className)))))
-
-     ((string-match "^req\s\\.\\.\\w+" phrase)
-      "Coffeescript + node.js require."
-      (let ((className (substring (elt args 1) 2 nil)))
-        (replace-line
          (format "{%s} = require \"../coffee/%s.coffee\""
                  className (un-camelcase className)))))
 
