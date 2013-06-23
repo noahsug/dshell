@@ -9,10 +9,10 @@ A simple emacs/git/bash environment that runs from Dropbox so all your computers
 
 It's recommened that you clone this repository inside Dropbox for easy sharing accross computers.
 
-You can add computer specific bash configurations by adding the file "bash/\<hostname\>.sh" where \<hostname\> is the hostname of your computer.
+You can add computer specific bash configurations by editing the file "bash/\<hostname\>.sh" where \<hostname\> is the hostname of your computer.
 
-### Trouble shotting
+### Trouble shooting
 If you have problems installing prelude, check out https://github.com/bbatsov/prelude for OS specific instructions.
 
-#### Mac OS X Terminal
+#### Mac OS X terminal
 Install the zenburn.terminal file form this repo to get the sexy zenburn theme (default theme for prelude).
