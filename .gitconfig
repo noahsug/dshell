@@ -19,7 +19,7 @@
         qlg = log --oneline -15
         qdi = diff --name-only
         qsh = show --name-only
-[color]1;2c
+[color]
 	ui = auto
 [core]
 	autocrlf = false

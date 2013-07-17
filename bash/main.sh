@@ -4,10 +4,21 @@ export PATH="/usr/local/bin:/usr/local/scala/scala-2.9.2/bin:$PATH"
 # npm installs
 export PATH="/usr/local/share/npm/bin:$PATH"
 
-# bash completion
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-    . `brew --prefix`/etc/bash_completion
+# bash completion for brew
+#if [ -f `brew --prefix`/etc/bash_completion ]; then
+#    . `brew --prefix`/etc/bash_completion
+#fi
+
+# bash completion for mac ports
+if [ -f /opt/local/etc/bash_completion ]; then
+    . /opt/local/etc/bash_completion
 fi
+
+# fix for "__git_ps1: command not found"
+source ~/.bashrc.d/sug/.git-prompt.sh
+
+# fix for "completion: function `_git' not found"
+source ~/.bashrc.d/sug/git-completion.bash
 
 complete -o bashdefault -o default -o nospace -F _git g 2>/dev/null \
     || complete -o default -o nospace -F _git g

@@ -1,0 +1,13 @@
+KeyRemap4MacBook -> For Appliactions -> Enable at only Terminal -> change Command_L and Option_L and vise versa
+
+Terminal -> Preferences -> keyboard -> check "Use option as meta key"
+
+Terminal -> Preferences -> text -> change font to Monaco 11pt.
+
+System Preferences -> Keyboard -> Modifier Keys -> change Caps Lock to Control
+
+System Preferences -> Keyboard Shortcuts -> Appliaction Shortcuts -> click the "+", select Terminal for the appliaction, add "Select Next Tab" as ^Q and "Select Previous Tab" as control-shift-Q.
+
+Install macports - http://www.macports.org/install.php
+
+Install Emacs 24 - sudo port install emacs

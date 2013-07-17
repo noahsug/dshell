@@ -67,7 +67,7 @@
 (menu-bar-mode 0)
 
 ;; highlight current line
-(set-face-background 'hl-line "#444")
+;(set-face-background 'hl-line "#444")
 
 ;; jump-char
 (require 'jump-char "~/.emacs.d/personal/sug/jump-char/jump-char.el")

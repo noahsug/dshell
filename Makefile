@@ -1,23 +1,33 @@
 all:
-	@echo \'make install\' - install everything
-	@echo \'make prelude\' - install prelude
-	@echo \'make bash\' - install bash environment
-	@echo \'make emacs\' - install emacs environment
+	@echo \'make i\' - install everything
+	@echo \'make s\' - install everything except prelude
+	@echo \'make p\' - install prelude
+	@echo \'make b\' - install bash environment
+	@echo \'make e\' - install emacs environment
+	@echo \'make g\' - install git environment
 
-install: prelude bash emacs
+s: b e g
+	bash 
+
+i: p b e g
 	bash
 
-prelude:
+p:
 	export PRELUDE_URL="https://github.com/noahsug/prelude.git" && curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
 
-bash:
+b:
 	mkdir -p ~/.bashrc.d
 	touch bash/"$$(hostname).sh"
 	-rm -r ~/.bashrc.d/sug
 	ln -s $$(pwd)/bash ~/.bashrc.d/sug
 
-emacs:
+e:
 	-rm -r ~/.emacs.d/personal/sug
 	-rm ~/.emacs.d/personal/sug.el
+	mkdir -p ~/.emacs.d/personal
 	ln -s $$(pwd)/emacs/sug.el ~/.emacs.d/personal/sug.el
 	ln -s $$(pwd)/emacs/sug ~/.emacs.d/personal/sug
+
+g:
+	-mv ~/.gitconfig ~/.gitconfig_backup
+	ln -s $$(pwd)/.gitconfig ~/
