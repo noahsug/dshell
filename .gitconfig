@@ -29,3 +29,5 @@
 	editor = emacs -nw
 [merge]
 	tool = kdiff3
+[push]
+	default = simple
