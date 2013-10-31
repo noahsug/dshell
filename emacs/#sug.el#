@@ -6,15 +6,12 @@
 
 ;; Code:
 
-;; delete selection on keypress
-(delete-selection-mode 1)
-
 ;;
 ; General key bindings
 ;;
 
 (global-set-key (kbd "C-x R") 'rename-file-and-buffer)
-(global-set-key (kbd "C-c C-s") 'spell-check-on)
+(global-set-key (kbd "C-c C-s") 'flyspell-buffer)
 (global-set-key (kbd "C-c C-e") 'flyspell-mode)
 (global-set-key (kbd "C-x m") 'shell)
 (global-set-key (kbd "C-x e") 'eval-last-sexp)
@@ -28,7 +25,7 @@
 (global-set-key (kbd "C-x B") 'ibuffer)
 (global-set-key (kbd "C-x r e") 'refresh-file)
 (global-set-key (kbd "M-g") 'goto-line)
-(global-set-key (kbd "C-j") 'hippie-expand)
+;(global-set-key (kbd "C-j") 'hippie-expand)
 ;(global-set-key (kbd "C-M-z") (lambda (char) (interactive "cZap to char backwards: ") (zap-to-char -1 char)))
 ;(global-set-key (kbd "C-M-Z") (lambda (char) (interactive "cZap up to char backwards: ") (zap-up-to-char -1 char)))
 (global-set-key (kbd "C-x C-p") (kbd "M-- C-x o"))
@@ -44,7 +41,10 @@
 ;(global-set-key (kbd "C-c r b") 'read-buffers-b)
 ;(global-set-key (kbd "C-c r c") 'read-buffers-c)
 
-;; projectile key bindings
+;;
+; projectile key bindings
+;;
+
 (global-set-key (kbd "C-c j") 'projectile-test-project)
 (global-set-key (kbd "C-c C-j") 'projectile-test-project)
 (global-set-key (kbd "C-x C-j") 'projectile-test-project)
@@ -80,6 +80,9 @@
 ;; no tabs
 (setq-default indent-tabs-mode nil)
 
+;; delete selection on keypress
+(delete-selection-mode 1)
+
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
   '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
@@ -107,9 +110,6 @@
 ;(set-face-background 'hl-line "#444")
 
 ;; subword mode
-(add-hook 'soy-mode-hook 'subword-mode)
-(add-hook 'java-mode-hook 'subword-mode)
-(add-hook 'js2-mode-hook 'subword-mode)
 (add-hook 'js-mode-hook 'subword-mode)
 (add-hook 'coffee-mode-hook 'subword-mode)
 (add-hook 'python-mode-hook 'subword-mode)
@@ -149,7 +149,7 @@
 
 
 ;; save buffers to desktop (TODO)
-;(desktop-save-mode 0)
+(desktop-save-mode 1)
 (defun save-buffers-a ()
   (interactive)
   (desktop-save "~/.emacs.d/"))
@@ -170,13 +170,6 @@
           (set-visited-file-name new-name)
           (set-buffer-modified-p nil))))))
 
-;; enable spell check - flyspell-mode again to disable
-(defun spell-check-on()
-  (interactive)
-  (flyspell-mode)
-  (flyspell-buffer)
-)
-
 ;;
 ; Requires
 ;;
@@ -187,8 +180,8 @@
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "/usr/local/google/home/sugarman/.emacs.d/personal/sug/ac-dict")
 (ac-config-default)
-(setq ac-auto-start t)
-(define-key ac-completing-map (kbd "ESC") 'ac-stop)
+;(define-key ac-mode-map (kbd "C-j") 'auto-complete)
+;(setq ac-auto-show-menu t)
 
 ;; ace-jump
 (require 'ace-jump-mode)
@@ -207,39 +200,21 @@
 ;    "^\*compilation" "^\*GTAGS" "^session\.*" "^\*"))
 
 ;; js2-mode
-(require 'js2-mode)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;(require 'js2-mode)
+;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
-(defun my-add-goog-externs ()
-  (let ((buf (buffer-string))
-        (index 0))
-    (while (string-match "\\1;3201;0c(goog\\.require\\|goog\\.provide\\)('\\([^'.]*\\)" buf index)
-      (setq index (+ 1 (match-end 0)))
-      (add-to-list 'js2-global-externs (match-string 2 buf)))))
+;; js2-mode + closure
+;(add-hook 'js2-post-parse-callbacks
+;          (lambda ()
+;            (let ((buf (buffer-string))
+;                  (index 0))
+;              (while (string-match "\\(goog\\.require\\|goog\\.provide\\)('\\([^'.]*\\)" buf index)
+;                (setq index (+ 1 (match-end 0)))
+;                (add-to-list 'js2-additional-externs (match-string 2 buf))))))
 
-(add-hook 'js2-mode-hook 'my-add-goog-externs)
-(add-to-list 'js2-global-externs "goog")
-
-(define-key js2-mode-map (kbd "C-c C-e") 'flyspell-mode)
-(define-key js2-mode-map (kbd "C-c C-s") 'spell-check-on)
-
-;; flymake gjlint
-(require 'flymake)
-(defun flymake-gjslint-init ()
-  "Initialize flymake for gjslint"
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace)))
-    ;; (list "gjslint" (list temp-file "--nosummary"))))
-    (list "gjslint" (list temp-file "--nosummary"))))
-(add-to-list 'flymake-allowed-file-name-masks
-             '(".+\\.js$"
-               flymake-gjslint-init
-               flymake-simple-cleanup
-               flymake-get-real-file-name))
-(add-to-list 'flymake-err-line-patterns
-             '("^Line \\([[:digit:]]+\\), E:[[:digit:]]+: "
-               nil 1 nil))
-
+;; better hippie-expand
+(require 'hippie-namespace)
+(global-hippie-namespace-mode 1)
 
 ;; whitespace mode
 (require 'whitespace)
@@ -275,11 +250,7 @@
 (global-set-key (kbd "M-j") 'template-expand)
 
 ;; soy-mode
-;(require 'soy-mode)
-
-;; better soy-mode
-(require 'closure-template-html-mode)
-(add-to-list 'auto-mode-alist '("\\.soy$" . closure-template-html-mode))
+(require 'soy-mode)
 
 ;; color for compilation buffer
 (require 'ansi-color)

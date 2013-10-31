@@ -11,6 +11,8 @@
 	cp = cherry-pick
 	di = diff
 	st = status
+        s = stash
+        a = stash apply
 	ft = fetch
 	pl = pull
         lg = log
@@ -24,3 +26,6 @@
 [core]
 	autocrlf = false
 	filemode = false
+	editor = emacs -nw
+[merge]
+	tool = kdiff3

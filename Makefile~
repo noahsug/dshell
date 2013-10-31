@@ -1,16 +1,15 @@
 all:
-	@echo \'make full\' - install everything
-	@echo \'make install\' - install everything except prelude
+	@echo \'make i\' - install everything
+	@echo \'make s\' - install everything except prelude
 	@echo \'make p\' - install prelude
 	@echo \'make b\' - install bash environment
 	@echo \'make e\' - install emacs environment
-	@echo \'make g\' - install git enpvironment
-	@echo \'make s\' - install screen environment
+	@echo \'make g\' - install git environment
 
-install: b e g s
-	bash
+s: b e g
+	bash 
 
-full: install p
+i: p b e g
 	bash
 
 p:
@@ -18,6 +17,7 @@ p:
 
 b:
 	mkdir -p ~/.bashrc.d
+	touch ~/.bashrc.d/"$$(hostname).sh"
 	-rm -r ~/.bashrc.d/sug
 	ln -s $$(pwd)/bash ~/.bashrc.d/sug
 
@@ -31,7 +31,3 @@ e:
 g:
 	-mv ~/.gitconfig ~/.gitconfig_backup
 	ln -s $$(pwd)/.gitconfig ~/
-
-s:
-	-mv ~/.screenrc ~/.screenrc_backup
-	ln -s $$(pwd)/.screenrc ~/
