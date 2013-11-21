@@ -59,6 +59,15 @@ function st() {
   echo -en "\033]2;$1\007"
 }
 
+# Update the name of the screen window
+function sts() {
+  echo -ne "\ek$1\e\\"
+}
+
+function git-branch-name() {
+  git branch 2>/dev/null| sed -n '/^\*/s/^\* //p'
+}
+
 ## emacs stuff
 #EDITOR="emacsclient -t"
 #VISUAL="emacsclient -t"

@@ -10,30 +10,18 @@
 
 ;;; Code:
 
-(defun delete-line ()
-  "Deletes the current line without putting it into the kill ring."
-  (delete-region (line-beginning-position) (line-end-position)))
-
-(defun un-camelcase (s &optional sep &optional start)
-  "Convert CamelCase string to lower case with separator."
-  (let ((case-fold-search nil))
-    (while (string-match "[A-Z]" s (or start 1))
-      (setq s (replace-match (concat (or sep "_")
-                                     (downcase (match-string 0 s)))
-                             t nil s)))
-    (downcase s)))
-
-(defun replace-line (text)
-  "Replace the text in the current line with TEXT."
-  (delete-line)
-  (insert text))
+(require 'sug-utils)
 
 (defun template-expand ()
   "Expand a line into a template."
   (interactive)
   (let (phrase args)
     (setq phrase
-          (replace-regexp-in-string "\n" "" (thing-at-point 'line)))
+          (cond
+           ((equal (buffer-size) 0)
+            "")
+           (t
+            (replace-regexp-in-string "\n" "" (thing-at-point 'line)))))
     (setq args (split-string phrase " "))
     (cond
 
@@ -44,11 +32,37 @@
          (format "exports.%s = class %s\n  " className className))))
 
      ((string-match "^req\s\\w+" phrase)
-      "Coffeescript + node.js require."
+      "CoffeeScript + node.js require."
       (let ((className (elt args 1)))
         (replace-line
-         (format "{%s} = require '../coffee/%s.coffee'"
+         (format "{%s} = require \"../coffee/%s.coffee\""
                  className (un-camelcase className)))))
+
+     ((string-match "^\s\scons$" phrase)
+      "CoffeeScript constructor"
+      (replace-line "  constructor: ->\n    "))
+
+     ((and (equal (buffer-size) 0) (has-extension "_spec.coffee"))
+      "Generate CoffeeScript file test header"
+      (insert (format (concat "{%s} = require \"../coffee/%s.coffee\"\n\n"
+                              "describe \"%s\", ->\n"
+                              "  %s = undefined\n\n"
+                              "  beforeEach ->\n"
+                              "    %s = new %s\n\n"
+                              "  it \"\", ->\n    ")
+                      (camelcase (get-base-file-name))
+                      (get-base-file-name)
+                      (camelcase (get-base-file-name))
+                      (var-case (get-base-file-name))
+                      (var-case (get-base-file-name))
+                      (camelcase (get-base-file-name))
+                      )))
+
+     ((and (equal (buffer-size) 0) (has-extension ".coffee"))
+      "Generate CoffeeScript file header"
+      (insert (format "exports.%s = class %s\n  "
+                      (camelcase (get-extensionless-file-name))
+                      (camelcase (get-extensionless-file-name)))))
 
      (t
       (message "unknown phrase \"%s\"" phrase)))))

@@ -1,28 +1,34 @@
-#
-## Control-^ (usually Control-Shift-6) is traditional and the only key not used by emacs
+## C-^
 #escape ^^^^
+
 ## C-]
 escape ^]^]
-#
+
 ## do not trash BackSpace, usually DEL
 bindkey -k kb
 bindkey -d -k kb
-#
+
 ## do not trash Delete, usually ESC [ 3 ~
 bindkey -k kD
 bindkey -d -k kD
 
-# no annoying startup message
+## no annoying startup message
 startup_message off
 
-# Turn the even more annoying whole-screen-flash-on-tab-complete "feature"
+## Turn the even more annoying whole-screen-flash-on-tab-complete "feature"
 vbell off
 
-terminfo xterm-color hs@:cs=\E[%i%p1%d;%p2%dr:im=\E[4h:ei=\E[4l
-term xterm-color
+## Colors?
+#terminfo xterm-color hs@:cs=\E[%i%p1%d;%p2%dr:im=\E[4h:ei=\E[4l
+#term xterm-color
 
-# Window list at the bottom. hostname, centered tabs and redmarked active windows:
-hardstatus alwayslastline
-hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
+## Window list at the bottom. hostname, centered tabs and redmarked active windows:
+#hardstatus alwayslastline
+#hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
 
-defscrollback 5000
+## Add name to terminal title bar
+termcapinfo xterm* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
+defhstatus "^E (^Et)"
+hardstatus off
+
+defscrollback 50000

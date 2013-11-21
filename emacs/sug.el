@@ -6,6 +6,9 @@
 
 ;; Code:
 
+;; Useful emacs shortcuts
+; C-M-x -> eval current expression
+
 ;; delete selection on keypress
 (delete-selection-mode 1)
 
@@ -14,6 +17,7 @@
 ;;
 
 (global-set-key (kbd "C-x R") 'rename-file-and-buffer)
+(global-set-key (kbd "C-x E") 'replace-regexp)
 (global-set-key (kbd "C-c C-s") 'spell-check-on)
 (global-set-key (kbd "C-c C-e") 'flyspell-mode)
 (global-set-key (kbd "C-x m") 'shell)
@@ -183,12 +187,24 @@
 
 (add-to-list 'load-path "~/.emacs.d/personal/sug")
 
+;; projectile
+(if (boundp 'skip-install-projectile) (progn
+  (setq compilation-read-command nil)
+  (require 'projectile)
+  (projectile-global-mode)
+))
+
+;; pabbrev
+(require 'pabbrev)
+(global-pabbrev-mode)
+(pabbrev-shut-up)
+
 ;; auto-complete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "/usr/local/google/home/sugarman/.emacs.d/personal/sug/ac-dict")
-(ac-config-default)
-(setq ac-auto-start t)
-(define-key ac-completing-map (kbd "ESC") 'ac-stop)
+;(require 'auto-complete-config)
+;(add-to-list 'ac-dictionary-directories "/usr/local/google/home/sugarman/.emacs.d/personal/sug/ac-dict")
+;(ac-config-default)
+;(setq ac-auto-start t)
+;(define-key ac-completing-map (kbd "ESC") 'ac-stop)
 
 ;; ace-jump
 (require 'ace-jump-mode)
@@ -205,6 +221,10 @@
 ;  ido-ignore-buffers ;; ignore these guys
 ;  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace"
 ;    "^\*compilation" "^\*GTAGS" "^session\.*" "^\*"))
+
+;; coffee-mode
+(require 'coffee-mode)
+(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 
 ;; js2-mode
 (require 'js2-mode)
