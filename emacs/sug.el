@@ -9,15 +9,13 @@
 ;; Useful emacs shortcuts
 ; C-M-x -> eval current expression
 
-;; delete selection on keypress
-(delete-selection-mode 1)
-
 ;;
 ; General key bindings
 ;;
-
+(global-set-key (kbd "C-x C-g C-d") 'delete-selection-mode)
+(global-set-key (kbd "C-x C-g C-s") 'subword-mode)
 (global-set-key (kbd "C-x R") 'rename-file-and-buffer)
-(global-set-key (kbd "C-x E") 'replace-regexp)
+(global-set-key (kbd "C-x X") 'replace-regexp)
 (global-set-key (kbd "C-c C-s") 'spell-check-on)
 (global-set-key (kbd "C-c C-e") 'flyspell-mode)
 (global-set-key (kbd "C-x m") 'shell)
@@ -117,6 +115,9 @@
 (add-hook 'js-mode-hook 'subword-mode)
 (add-hook 'coffee-mode-hook 'subword-mode)
 (add-hook 'python-mode-hook 'subword-mode)
+(eval-after-load (format "js2-emacs%d" emacs-major-version)
+  '(progn
+     (add-hook 'js2-mode-hook 'subword-mode)))
 
 ;; use aspell instead of ispell
 ;(setq ispell-list-command "--list")
@@ -187,8 +188,15 @@
 
 (add-to-list 'load-path "~/.emacs.d/personal/sug")
 
+;; less mode
+(require 'less-css-mode)
+(add-to-list 'auto-mode-alist '("\\.less$" . less-css-mode))
+
+;; sass mode
+(add-to-list 'auto-mode-alist '("\\.scss" . css-mode))
+
 ;; projectile
-(if (boundp 'skip-install-projectile) (progn
+(if (not (boundp 'skip-install-projectile)) (progn
   (setq compilation-read-command nil)
   (require 'projectile)
   (projectile-global-mode)
@@ -226,22 +234,30 @@
 (require 'coffee-mode)
 (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 
+;; css-mode
+(add-to-list 'auto-mode-alist '("\\.gss$" . css-mode))
+
 ;; js2-mode
-(require 'js2-mode)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;(require 'js2-mode)
+;;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;(autoload 'js2-minor-mode (format "js2-emacs%d" emacs-major-version) nil t)
+;(add-hook 'js-mode-hook 'js2-minor-mode)
 
-(defun my-add-goog-externs ()
-  (let ((buf (buffer-string))
-        (index 0))
-    (while (string-match "\\1;3201;0c(goog\\.require\\|goog\\.provide\\)('\\([^'.]*\\)" buf index)
-      (setq index (+ 1 (match-end 0)))
-      (add-to-list 'js2-global-externs (match-string 2 buf)))))
+;(defun my-add-goog-externs ()
+;  (interactive)
+;  (let ((buf (buffer-string))
+;        (index 0))
+;    (while (string-match "\\1;3201;0c(goog\\.require\\|goog\\.provide\\)('\\([^'.]*\\)" buf index)
+;      (setq index (+ 1 (match-end 0)))
+;      (add-to-list 'js2-global-externs (match-string 2 buf)))))
+;
+;(add-hook 'js2-mode-hook 'my-add-goog-externs)
+;(add-hook 'js-mode-hook 'my-add-goog-externs)
+;(add-to-list 'js2-global-externs "goog")
+;(add-to-list 'js2-global-externs "gcomm")
 
-(add-hook 'js2-mode-hook 'my-add-goog-externs)
-(add-to-list 'js2-global-externs "goog")
-
-(define-key js2-mode-map (kbd "C-c C-e") 'flyspell-mode)
-(define-key js2-mode-map (kbd "C-c C-s") 'spell-check-on)
+;(define-key js2-mode-map (kbd "C-c C-e") 'flyspell-mode)
+;(define-key js2-mode-map (kbd "C-c C-s") 'spell-check-on)
 
 ;; flymake gjlint
 (require 'flymake)
@@ -271,6 +287,7 @@
 (setq mweb-default-major-mode 'js-mode)
 (setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
 ;                  (js-mode "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
+;                  (js2-mode "<script.*>" "</script>")
                   (js-mode "<script.*>" "</script>")
                   (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
 (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))

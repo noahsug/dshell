@@ -27,10 +27,9 @@
   (replace-regexp-in-string
    (format "_%s$" testSuffix) "" (get-extensionless-file-name)))
 
-(defun string/ends-with (s ending)
+(defun string-ends-with (s ending)
   "return non-nil if string S ends with ENDING."
-  (let ((elength (length ending)))
-    (string= (substring s (- 0 elength)) ending)))
+  (string-match (concat ending "$") s))
 
 (defun delete-line ()
   "Deletes the current line without putting it into the kill ring."
@@ -67,7 +66,7 @@
 
 (defun has-extension (extension)
   "Returns whether the current buffer has the given EXTENSION."
-  (string/ends-with (buffer-name) extension))
+  (string-ends-with (buffer-name) extension))
 
 (provide 'sug-utils)
 ;;; swap-impl-test.el ends here

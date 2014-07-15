@@ -4,6 +4,8 @@
 [alias]
         rbm = rebase master
 	rb = rebase
+	ri = rebase -i
+	ra = rebase -i --autosquash
 	cm = commit
 	ca = commit -am
 	co = checkout
@@ -14,13 +16,18 @@
         s = stash
         a = stash apply
 	ft = fetch
-	pl = pull
+        p = push
+	pl = pull --rebase
+        plu = pull --rebase upstream master
         lg = log
         sh = show
 	tree = log --oneline --decorate --graph
         qlg = log --oneline -15
+        qlg2 = log --oneline -30
         qdi = diff --name-only
         qsh = show --name-only
+        qrf = reflog -15
+        qrf2 = reflog -30
 [color]
 	ui = auto
 [core]

@@ -35,7 +35,7 @@
       "CoffeeScript + node.js require."
       (let ((className (elt args 1)))
         (replace-line
-         (format "{%s} = require \"../coffee/%s.coffee\""
+         (format "{%s} = require '../coffee/%s.coffee'"
                  className (un-camelcase className)))))
 
      ((string-match "^\s\scons$" phrase)
@@ -44,12 +44,12 @@
 
      ((and (equal (buffer-size) 0) (has-extension "_spec.coffee"))
       "Generate CoffeeScript file test header"
-      (insert (format (concat "{%s} = require \"../coffee/%s.coffee\"\n\n"
-                              "describe \"%s\", ->\n"
+      (insert (format (concat "{%s} = require '../coffee/%s.coffee'\n\n"
+                              "describe '%s', ->\n"
                               "  %s = undefined\n\n"
                               "  beforeEach ->\n"
                               "    %s = new %s\n\n"
-                              "  it \"\", ->\n    ")
+                              "  it '', ->\n    ")
                       (camelcase (get-base-file-name))
                       (get-base-file-name)
                       (camelcase (get-base-file-name))
@@ -65,6 +65,6 @@
                       (camelcase (get-extensionless-file-name)))))
 
      (t
-      (message "unknown phrase \"%s\"" phrase)))))
+      (message "unknown phrase '%s'" phrase)))))
 (provide 'template-expand)
 ;;; template-expand.el ends here
