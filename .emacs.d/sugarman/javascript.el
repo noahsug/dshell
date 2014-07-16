@@ -23,7 +23,35 @@
     (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
     (local-set-key "\C-c\C-r" 'js-send-region)
     (local-set-key "\C-cl" 'js-load-file-and-go))
+
+  (ac-js2-mode)
+
+  (closure-lint-mode)
+
+  ; because js2-mode.el isn't providing it for some reason...
+  (defvar js2-mode-version 20140114)
+
   (subword-mode))
+
+;; Add Google Closure externs
+(add-hook 'js2-post-parse-callbacks
+          (lambda ()
+            (let ((buf (buffer-string))
+                  (index 0))
+              (while (string-match "\\(goog\\.require\\|goog\\.provide\\)('\\([^'.]*\\)" buf index)
+                (setq index (+ 1 (match-end 0)))
+                (add-to-list 'js2-additional-externs (match-string 2 buf))))))
+
+;; Add jasmine externs
+(defun add-jasmine-externs()
+  (interactive)
+  (when (or (string-match "_spec.js" (buffer-file-name))
+            (string-match "_test.js" (buffer-file-name)))
+    (add-to-list 'js2-additional-externs
+            '("jasmine" "describe" "xdescribe" "it" "xit" "expect" "spyOn"
+              "beforeEach" "afterEach" "runs" "waits" "waitsFor"
+              "angular" "module" "inject"))))
+(add-hook 'js2-mode-hook 'add-jasmine-externs)
 
 (eval-after-load "js2-mode"
   '(let ((closure-snippets "~/.emacs.d/snippets/closure-snippets/emacs"))

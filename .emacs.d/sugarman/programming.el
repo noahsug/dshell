@@ -1,3 +1,6 @@
+;; protobuf auto-complete
+(add-hook 'protobuf-mode-hook 'auto-complete-mode)
+
 ;; base functions common to programming modes
 
 ;; find project files on load

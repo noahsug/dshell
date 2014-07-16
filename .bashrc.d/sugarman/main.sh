@@ -120,7 +120,7 @@ bind "C-p":history-search-backward
 bind "C-n":history-search-forward
 
 # ack-grep
-alias ag="ack-grep"
+alias ack="ack-grep"
 
 # edit shortcuts
 alias _eb="e ~/.bashrc.d/sugarman/main.sh"
