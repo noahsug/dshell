@@ -3,7 +3,7 @@
 
 ;; go. away.
 (tool-bar-mode -1)
-(scroll-bar-mode -1)
+(menu-bar-mode -1)
 
 (setq inhibit-startup-screen t)
 
@@ -74,10 +74,10 @@
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) different folder.
 (custom-set-variables
-  '(auto-save-file-name-transforms '((".*" "~/.emacs_autosaves/\\1" t)))
-  '(backup-directory-alist '((".*" . "~/.emacs_backups/"))))
+  '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
+  '(backup-directory-alist '((".*" . "~/.emacs.d/backups/"))))
 ; create the autosave dir if necessary, since emacs won't.
-(make-directory "~/.emacs_autosaves/" t)
+(make-directory "~/.emacs.d/autosaves/" t)
 
 ;; don't word wrap
 (setq toggle-truncate-lines nil)
@@ -118,14 +118,13 @@
 
 ;; system specific customizations
 
-;; mac os x
 (if (string-equal system-type "darwin")
-    (setq ns-alternate-modifier 'meta
+  ;; mac os x
+  (setq ns-alternate-modifier 'meta
         ns-command-modifier 'meta)
-  ;; remove menu bar in non-mac os x
-  (menu-bar-mode -1)
-  ;; w32
-  (when (string-equal system-type "windows-nt")
-    (load (concat elisp-root "/w32"))))
 
-(server-start)
+  ;; non-mac x
+  (scroll-bar-mode -1))
+
+;; Choosing not to use this since we use screen.
+;(server-start)

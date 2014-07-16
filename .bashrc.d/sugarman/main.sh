@@ -15,10 +15,10 @@ if [ -f /opt/local/etc/bash_completion ]; then
 fi
 
 # fix for "__git_ps1: command not found"
-source ~/.bashrc.d/sug/.git-prompt.sh
+source ~/.bashrc.d/sugarman/.git-prompt.sh
 
 # fix for "completion: function `_git' not found"
-source ~/.bashrc.d/sug/git-completion.bash
+source ~/.bashrc.d/sugarman/git-completion.bash
 
 #complete -o bashdefault -o default -o nospace -F _git g 2>/dev/null \
 #  || complete -o default -o nospace -F _git g
@@ -80,18 +80,17 @@ function git-branch-name() {
 }
 
 ## emacs stuff
-EDITOR="emacsclient -t"
-VISUAL="emacsclient -t"
-#EDITOR="emacs -nw"
-#VISUAL="emacs -nw"
+EDITOR="emacs -nw -Q"
+VISUAL="emacs -nw -Q"
 
 # alias
+alias b="bash"
 alias g="git"
-alias e="emacsclient -t -a emacs -nw"
-#alias e="emacs -nw"
-alias es="killall emacs ; emacs --daemon"
-alias en="killall emacs ; emacs --daemon ; emacsclient -t -a emacs -nw"
-alias ei="emacs -nw"
+alias es="emacsclient -t -a emacs -nw"
+alias en="killall emacs ; emacs --daemon"
+#alias en="killall emacs ; emacs --daemon ; emacsclient -t -a emacs -nw"
+alias e="emacs -nw"
+alias eq="emacs -nw -Q"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."

@@ -15,8 +15,6 @@
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-xX" 'replace-regexp)
 
-(global-set-key "\C-xE" 'eval-last-sexp)
-
 (global-set-key "\C-x\C-g\C-d" 'delete-selection-mode)
 (global-set-key "\C-x\C-g\C-s" 'subword-mode)
 
@@ -74,7 +72,7 @@
 
 ;; CVS Emacs is binding this to recenter-top-bottom.
 (global-set-key [(control ?l)] 'recenter)
-1;2c
+
 ;; imenu is useful if it can be invoked quickly
 (global-set-key [(control shift ?o)] 'imenu)
 

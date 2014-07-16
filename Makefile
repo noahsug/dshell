@@ -33,16 +33,19 @@ e:
 	rm -rf ~/.emacs.d/insert
 	ln -s $$(pwd)/.emacs.d/insert ~/.emacs.d/insert
 
+	rm -f ~/.emacs.d/sugarman_init.el
+	ln -s $$(pwd)/.emacs.d/sugarman_init.el ~/.emacs.d/sugarman_init.el
+
 	rm -f ~/add_this_to_your_dot_emacs
 	cp $$(pwd)/.emacs ~/add_this_to_your_dot_emacs
-	@echo Bash installed successfully! Please append the contents of the \'add_this_to_your_dot_emacs\' file to .emacs.
+	@echo Emacs installed successfully! Please append the contents of the \'add_this_to_your_dot_emacs\' file to .emacs.
 
 g:
 	-rm ~/add_this_to_your_gitconfig
 	cp $$(pwd)/.gitconfig ~/add_this_to_your_gitconfig
-	@echo Bash installed successfully! Please append the contents of the \'add_this_to_your_gitconfig\' file to .gitconfig.
+	@echo Gitconfig installed successfully! Please append the contents of the \'add_this_to_your_gitconfig\' file to .gitconfig.
 
 s:
 	-rm ~/add_this_to_your_screenrc
 	cp $$(pwd)/.screenrc ~/add_this_to_your_screenrc
-	@echo Bash installed successfully! Please append the contents of the \'add_this_to_your_screenrc\' file to .screenrc.
+	@echo Screenrc installed successfully! Please append the contents of the \'add_this_to_your_screenrc\' file to .screenrc.
