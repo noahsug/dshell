@@ -1,1 +1,1 @@
-. ~/.bashrc.d/sug/main.sh
+. ~/.bashrc.d/sugarman/main.sh

@@ -1,0 +1,23 @@
+== Prerequisites ==
+
+Before proceeding, make sure you have the latest versions of
+yasnippet[1] and js2-mode[2] installed and configured.
+
+1. http://code.google.com/p/yasnippet/
+2. http://code.google.com/p/js2-mode/
+
+== Configuration ==
+
+Clone the snippets repository, and add the following to ~/.emacs,
+adjusting the path as necessary:
+
+(let ((closure-snippets "~/dev/closure-snippets/emacs"))
+  (add-to-list 'load-path closure-snippets)
+  (require 'closure-snippets-support)
+  (yas/load-directory closure-snippets))
+
+Closure Snippets uses prompt functions, which you will probably want
+to configure if you haven't already, as the default (yas/x-prompt) is
+not very usable. I suggest the following configuration:
+
+(setq yas/prompt-functions '(yas/ido-prompt yas/dropdown-prompt yas/completing-prompt yas/x-prompt yas/no-prompt))
