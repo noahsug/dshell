@@ -1,0 +1,105 @@
+NOAH'S BASH PROPOSAL
+
+###
+# BRANCHING
+##
+
+# Move a commit to another branch.
+move <branch> [commit]
+(gm note-be 35b4a2f..348j91k)
+
+# Rebase on top of another branch (or update if already rebased).
+branch_rebase <branch>
+(gb note-fe)
+
+# Move then branch_rebase on branch commit was moved to.
+move_branch_rebase <branch> [commits]
+(gmb note-fe HEAD~1)
+
+# Creates first commit in new branch, marking start of feature.
+first_commit [branch] <commit>
+(gs "first commit!")
+
+# Renames commit, opens editor with current message if message not provided.
+rename [commit] [message]
+(gr "new message")
+(gr 94rds3f)
+
+
+###
+# REMOTE COMMANDS
+##
+
+# Syncs branch w/o having to switch to it.
+sync [branch]
+(gy)
+
+# Export branch w/o having to switch to it.
+export [branch]
+(ge note-fe)
+
+sync_export [branch]
+(gye)
+
+
+###
+# QUICK FIX
+##
+
+quick_fix
+(gf)
+
+quick_fix_amend
+(gfa)
+
+quick_fix_export
+(gfe)
+
+quick_fix_amend_export
+(gfae)
+
+# Squashes all quick fixes.
+squash [branch]
+(gq note-be)
+
+
+###
+# BUILDING AND RUNNING
+##
+
+# Note: First letter represents the project:
+#       (e.g. _sr = run smallworld, _tr = run tee, etc)
+
+# Run on port (default 8888)
+run[port]
+(_sr9990)
+
+# Export, switch to g4, run on port (default 9090)
+export_run[port]
+(_ser)
+
+build
+(_sb)
+
+build_run
+(_sbr)
+
+build_export_run
+(_sber9990)
+
+gendeps
+(_sg)
+
+
+###
+# BOOKMARKS
+##
+
+bookmark
+(bm sw)
+
+go_to_bookmark
+(bsw)
+
+bookmark_path
+($bbsw)

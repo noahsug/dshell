@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.isObject($1)$0

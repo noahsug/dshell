@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.isString($1)$0

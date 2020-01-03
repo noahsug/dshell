@@ -1,3 +1,0 @@
-# group: closure.array
-# --
-goog.array.reduce(${1:array}, ${2:function(previousValue, currentValue) { return $3; }}, ${4:0}${5:, ${6:this}})$0

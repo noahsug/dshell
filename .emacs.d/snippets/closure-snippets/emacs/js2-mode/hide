@@ -1,3 +1,0 @@
-# group: closure.style
-# --
-goog.style.showElement(${element}, false);

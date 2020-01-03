@@ -1,3 +1,0 @@
-# group: closure.asserts
-# --
-goog.asserts.assert($1${2:, '$3'})$0

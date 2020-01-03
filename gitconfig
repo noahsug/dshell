@@ -1,0 +1,184 @@
+[user]
+	name = noah.sugarman
+	email = noah.sugarman@airbnb.com
+[alias]
+        rbm = rebase origin/master
+	rb = rebase
+	rbc = rebase --continue
+        # rebase on top of origin/master by cherry-picking changes
+        # git rbcp my-branch
+        rbcp = !sh -c '\
+          git branch > /dev/null && \
+          starting_branch=$(git rev-parse --abbrev-ref HEAD) && \
+          git checkout origin/master 2>/dev/null && \
+	  ( git branch -D tmp &>/dev/null || true ) && \
+	  git branch tmp $1 && \
+          baseSha=$(git merge-base origin/master $1) && \
+          headSha=$(git rev-parse $1) && \
+          git branch -D $1 && \
+	  git checkout -b $1 && \
+	  git cherry-pick $baseSha...$headSha && \
+          git checkout $starting_branch \
+        ' -
+	ri = rebase -i
+        rim = rebase -i origin/master
+	ria = rebase -i --autosquash
+	# git rebase -i <merge-base>
+	rib = !sh -c 'git rebase -i $(git merge-base HEAD origin/master)' -
+
+	test = !sh -c 'echo $1 $1 $1' -
+	re = !sh -c '\
+	  x=$(([ -z $1 ] && echo 0) || echo $1) && \
+	  git reset --hard HEAD~$x && git clean -fd' -
+	reb = !sh -c 'git reset --hard $(git merge-base origin/master HEAD) && git clean -fd' -
+	res = !sh -c 'git reset HEAD~$1' -
+	resb = !sh -c 'git reset $(git merge-base origin/master HEAD)' -
+        reh = reset --hard
+
+	cm = commit
+	ca = commit -am
+
+	co = checkout
+	com = checkout master
+        # rebase on top of origin/master by cherry-picking changes
+        # git rbcp my-branch, then check out the branch (see rbcp)
+        corb = !sh -c '\
+          git branch > /dev/null && \
+          git checkout origin/master 2>/dev/null && \
+	  ( git branch -D tmp &>/dev/null || true ) && \
+	  git branch tmp $1 && \
+          baseSha=$(git merge-base origin/master $1) && \
+          headSha=$(git rev-parse $1) && \
+          git branch -D $1 && \
+	  git checkout -b $1 && \
+	  git cherry-pick $baseSha...$headSha \
+        ' -
+
+	cp = cherry-pick
+	cpc = cherry-pick --continue
+	# cherry-pick branch
+        cpb = !sh -c 'git cherry-pick $(git merge-base $1 origin/master)..$1 -n && git commit -am $1' -
+
+	di = diff
+	diq = diff --name-only
+	dib = !sh -c 'git diff $(git merge-base origin/master HEAD)' -
+	dibq = !sh -c 'git diff --name-only $(git merge-base HEAD origin/master)' -
+	dim = !sh -c 'git diff origin/master' -
+	dimq = !sh -c 'git diff --name-only origin/master' -
+
+	st = status
+
+	ft = fetch
+	ftm = fetch origin master
+	# fetch and rebase
+	fr = !sh -c '\
+	  b=$(git symbolic-ref --short HEAD) && \
+	  git fetch origin master && git rebase origin/master && \
+	  ( [[ $b = "master" ]] || ( \
+	    git checkout master && \
+	    git rebase origin/master && \
+	    git checkout $b \
+	  )) \
+	' -
+	# fetch and rebase and export
+	fre = !sh -c '\
+	  b=$(git symbolic-ref --short HEAD) && \
+	  git fetch origin master && git rebase origin/master && \
+	  ( [[ $b = "master" ]] || ( \
+	    git checkout master && \
+	    git rebase origin/master && \
+	    git checkout $b \
+	  )) && \
+          git push --force \
+	' -
+
+        s = stash
+        a = stash apply
+
+        p = push
+	e = push --force
+
+	pl = pull --rebase
+        plu = pull --rebase upstream master
+
+        sh = show
+	shq = show --name-only --pretty=""
+
+        lg = log --oneline -15
+        lg2 = log --oneline -30
+        lg3 = log --oneline
+	lgd = log --format='%cd %s'
+	tree = log --oneline --decorate --graph
+
+	rlg = reflog -15
+        rlg2 = reflog -30
+	rlg3 = reflog
+
+	br = branch --sort=-committerdate
+	# start new branch
+	brs = !sh -c 'git checkout -b $1 origin/master' -
+	# start new branch, moving commits from current branch : g brsm new-branch
+	brsm = !sh -c '\
+	  sha=$(([ -z $2 ] && echo $(git merge-base origin/master HEAD)) || echo HEAD~$2) && \
+	  git branch $1 && \
+	  git reset --hard $sha && \
+	  git checkout $1 \
+	' -
+	# git branch tmp - backup changes in tmp branch
+        brt = !sh -c '\
+	  b=$(git symbolic-ref --short HEAD) && \
+	  ( git branch -D tmp &>/dev/null || true ) && \
+	  git branch tmp $b \
+	' -
+	# git branch tmp swap - swap changes with tmp
+        brts = !sh -c '\
+	  b=$(git symbolic-ref --short HEAD) && \
+          git branch -M "$b"-tmp && \
+          git branch -M tmp "$b" && \
+          git branch -M "$b"-tmp tmp && \
+          git checkout "$b" \
+	' -
+        # delete branch: g dr [branch-name="current-branch"]
+        brd = !sh -c '\
+          git branch > /dev/null && \
+          b=$(([ -z $1 ] && echo $(git symbolic-ref --short HEAD)) || echo $1) && \
+          (( [ -z $1 ] && (git checkout - || git checkout master) ) || true ) && \
+          ( git push --delete origin $b & git branch -D $b & wait ) \
+        ' -
+	# delete branch quickly, without removing it from origin
+        brdq = !sh -c '\
+	  git branch > /dev/null && \
+          b=$(([ -z $1 ] && echo $(git symbolic-ref --short HEAD)) || echo $1) && \
+	  (( [ -z $1 ] && (git checkout - || git checkout master) ) || true ) && \
+	  git branch -D $b \
+        ' -
+
+	# git fix
+	f = !sh -c 'git add . && git commit --fixup HEAD' -
+	# git fix, but manually add files
+	fm = !sh -c 'git commit --fixup HEAD' -
+	# git fix, but append to previous commit
+	fa = !sh -c 'git add . && git commit --amend -C HEAD' -
+	# git fix, but manually add files and append to previous commit
+	fma = !sh -c 'git commit --amend -C HEAD' -
+	# git fix, then export
+	fe = !sh -c 'git add . && git commit --fixup HEAD && git push --force' -
+	# git fix ammend, then export
+	fae = !sh -c 'git add . && git commit --amend -C HEAD && git push --force' -
+[color]
+	ui = auto
+[core]
+	autocrlf = false
+	filemode = false
+	editor = emacs -nw -Q
+	precomposeunicode = true
+	excludesfile = /Users/noah_sugarman/.gitignore_global
+	sparseCheckout = true
+[merge]
+	tool = kdiff3
+[push]
+	default = current
+[rerere]
+	enabled = true
+[hub]
+	host = git.musta.ch

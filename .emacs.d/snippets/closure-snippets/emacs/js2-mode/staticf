@@ -1,5 +1,0 @@
-# group: closure
-# --
-`(get-current-provide-string)`.${1:fn} = function($2) {
-  $0
-};

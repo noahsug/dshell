@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.partial(${1:fn}, $0)

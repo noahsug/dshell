@@ -1,3 +1,0 @@
-# group: closure.timer
-# --
-goog.Timer.callOnce(${1:function() { $2 }}${3:, ${4:interval}${5:, ${6:handler}}})$0

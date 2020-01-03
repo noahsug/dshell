@@ -1,0 +1,7 @@
+import `(buffer-nontest-class-name)` from '../`(buffer-nontest-name)`'
+
+describe('`(buffer-nontest-desc)`', () => {
+  it('$1', () => {
+    $0
+  })
+})

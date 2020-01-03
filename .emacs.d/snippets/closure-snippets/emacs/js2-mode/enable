@@ -1,3 +1,0 @@
-# group: closure.forms
-# --
-goog.dom.forms.setDisabled(${element}, false);

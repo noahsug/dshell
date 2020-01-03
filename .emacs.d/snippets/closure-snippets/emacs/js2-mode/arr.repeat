@@ -1,3 +1,0 @@
-# group: closure.array
-# --
-goog.array.repeat(${1:value}, ${2:1})$0

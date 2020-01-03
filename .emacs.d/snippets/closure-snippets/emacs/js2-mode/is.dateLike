@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.isDateLike($1)$0

@@ -1,3 +1,0 @@
-# group: closure.array
-# --
-goog.array.sort(${1:array}, ${2:function(lhs, rhs) { return $3; }})$0

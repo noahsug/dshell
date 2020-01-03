@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.isFunction($1)$0

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# git checkout for first branch that matches the first script argument
+
+echo "Running $0 with parameter [$1]"
+
+PART_OF_BRANCH_NAME=$1
+
+if [ -z "${PART_OF_BRANCH_NAME}" ]; then
+    echo "Please pass 1 parameter with part of a branch name"; exit 1;
+fi
+
+echo "Matching branches: "  # added "- " as prefix for the list
+git for-each-ref --format='- %(refname:short)' refs/heads/ | grep ${PART_OF_BRANCH_NAME}
+
+foundBranchName=`git for-each-ref --format='%(refname:short)' refs/heads/ --sort=-committerdate | grep ${PART_OF_BRANCH_NAME} | head -1`
+
+if [ -z "${foundBranchName}" ]; then
+    echo "No matching branch found"; exit 2;
+fi
+
+echo "Checking out ${foundBranchName}"
+git checkout ${foundBranchName}

@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.isDefAndNotNull($1)$0

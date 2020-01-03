@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.isArrayLike($1)$0

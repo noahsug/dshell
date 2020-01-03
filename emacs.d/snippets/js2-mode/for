@@ -1,0 +1,4 @@
+const len = $1.length
+for (let i = 0; i < len; i++) {
+  $0$1[i]
+}

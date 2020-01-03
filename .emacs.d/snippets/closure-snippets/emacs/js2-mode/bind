@@ -1,3 +1,0 @@
-# group: closure
-# --
-goog.bind(${1:this.${2:fn}}, ${3:this})$0
