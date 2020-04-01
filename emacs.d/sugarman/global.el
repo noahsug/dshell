@@ -1,5 +1,7 @@
 (load-theme 'base16-default-dark t)
 
+; (byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
+
 ;; "advanced" features
 (put 'narrow-to-region 'disabled nil)
 (put 'scroll-left 'disabled nil)

@@ -6,6 +6,8 @@
 (global-set-key "\C-xb" 'helm-buffers-list)
 (global-set-key "\C-xB" 'ibuffer)
 (global-set-key "\C-xn" 'ido-switch-buffer-no-flx)
+(global-set-key (kbd "C-x .") 'next-buffer)
+(global-set-key (kbd "C-x ,") 'previous-buffer)
 (global-set-key "\C-x\C-f" 'helm-find-files)
 (global-set-key "\C-x\C-n" 'ido-find-file-no-flx)
 
@@ -36,7 +38,6 @@
 
 ; jsx mode
 (global-set-key "\C-x\C-g\C-x" 'rjsx-mode)
-;(global-set-key "\C-x\C-g\C-f" 'flyspell-mode)
 ;(global-set-key "\C-x\C-g\C-c" 'flycheck-mode)
 (global-set-key "\C-x\C-g\C-c" 'ns/copy-filename)
 (global-set-key "\C-x\C-gc" 'ns/copy-file)

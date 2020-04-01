@@ -7,54 +7,54 @@ alias gsd="g show | grep 'Debug\.log'"
 alias gsdl="g show | grep '\(Debug\.log\|git\)'"
 
 # current branch
-function gb() {
+gb() {
   git symbolic-ref --short HEAD
 }
 
 # merge-base
-function gmb() {
+gmb() {
   git merge-base origin/master HEAD
 }
 
 # remote origin name
-function gremote() {
+gremote() {
   git remote get-url origin | grep -oEi '\/(.+)\.git' | sed 's/\///' | sed 's/\.git//'
 }
 
 # compare branch
-function gcb() {
+gcb() {
   echo 'https://git.musta.ch/airbnb/$(gremote)/compare/$(gb)' | xargs open -a 'Google Chrome'
 }
 
-function gcm() {
+gcm() {
   git checkout master
 }
 
-function grs() {
+grs() {
   git reset HEAD~$1
 }
-function gre() {
+gre() {
   git reset --hard HEAD~$1
 }
-function grc() {
+grc() {
   git reset --hard HEAD~$1
   g clean -fd
 }
-function grcm() {
+grcm() {
   git reset --hard $(gmb)
   g clean -fd
 }
-function grsm() {
+grsm() {
   git reset $(gmb)
 }
 
-function gdm() {
+gdm() {
   git diff $(gmb)
 }
-function gqdm() {
+gqdm() {
   git diff --name-only $(gmb)
 }
-function grim() {
+grim() {
   git rebase -i $(gmb)
 }
 
@@ -76,22 +76,22 @@ alias gfc='git-fuzzy-checkout'
 # remove dead branches
 alias gclean='git-clean.js'
 
-function gcleanf() {
+gcleanf() {
   gclean; g gc; g prune; g remote prune origin;
 }
 
 # check out latest branch (or 2nd latest if you're on latest)
 # pass N to switch to the Nth branch
-function gcl() {
-  n=$(([ -z "$1" ] && echo "1") || echo "$1")
-  branch_1=$(git for-each-ref --format='%(refname:short)' refs/heads/ --sort=-committerdate | head -n "$n" | tail -n 1)
-  branch_2=$(git for-each-ref --format='%(refname:short)' refs/heads/ --sort=-committerdate | head -n "$(($n + 1))" | tail -n 1)
+gcl() {
+  n=$(([ -z "$1" ] && echo "0") || echo "$1")
+  branch_1=$(git for-each-ref --format='%(refname:short)' refs/heads/ --sort=-committerdate | head -n "$(($n + 1))" | tail -n 1)
+  branch_2=$(git for-each-ref --format='%(refname:short)' refs/heads/ --sort=-committerdate | head -n "$(($n + 2))" | tail -n 1)
   my_branch=$(gb)
   git checkout $(([ "$branch_1" == "$my_branch" ] && echo "$branch_2") || echo "$branch_1")
 }
 
 # git tmp branch - stash changes into tmp branch
-function gtb() {
+gtb() {
   MY_GIT_BRANCH=$(gb)
   git branch -D tmp
   git checkout -b tmp
@@ -99,7 +99,7 @@ function gtb() {
 }
 
 # git tmp branch swap - swap changes with tmp
-function gtbs() {
+gtbs() {
   MY_GIT_BRANCH=$(gb)
   git branch -m "$MY_GIT_BRANCH"-tmp
   git branch -m tmp "$MY_GIT_BRANCH"
@@ -108,14 +108,14 @@ function gtbs() {
 }
 
 # fetch and rebase
-# function gfr() {
+# gfr() {
 #   MY_GIT_BRANCH=$(gb)
 #   git checkout master
 #   git pull origin master
 #   git checkout $MY_GIT_BRANCH
 #   git rebase master
 # }
-# function gfrp() {
+# gfrp() {
 #   MY_GIT_BRANCH=$(gb)
 #   git checkout production
 #   git fetch
@@ -125,15 +125,15 @@ function gtbs() {
 # }
 
 # git start branch
-# function gsb() {
+# gsb() {
 #   git checkout -b "$1" origin/master
 # }
-# function gsbp() {
+# gsbp() {
 #   git checkout -b "$1" production
 # }
 
 # move commits from current branch to new branch : gsbm my-branch
-#function gsbm() {
+#gsbm() {
 #  sha=$(([ -z "$2" ] && echo "$(gmb)") || echo "HEAD~$2")
 #  git branch $1
 #  git reset --hard $sha
@@ -141,43 +141,100 @@ function gtbs() {
 #}
 
 # g diff only changes
-function gdo() {
+gdo() {
   b=$(([ -z $1 ] && echo "master") || echo $1)
   git diff $b | rg '^[+-][^+-]'
 }
 
 # gdo master additions
-function gdoam() {
+gdoam() {
   git diff master | rg '^[+][^+]'
 }
 
 # gdo master deletions
-function gdodm() {
+gdodm() {
   git diff master | rg '^[-][^-]'
 }
 
 # gdo master additions w/ filename
-function gdoafm() {
+gdoafm() {
   git diff master | rg '^\+'
 }
 
 # gdo master deletions w/ filename
-function gdodfm() {
+gdodfm() {
   git diff master | rg '^\-'
 }
 
 # gdo master changes w/ filename
-function gdofm() {
+gdofm() {
   git diff master | rg -e '^\-' -e '^\+'
 }
 
 # git reset grep - run 'g co master' on each matching file
 #   e.g. greg 'app/.*jsx'
-function greg() {
+greg() {
   git st | rg "$1" -o | xargs -I % sh -c 'git co master %;'
 }
 
-## Helper functions
+## Rerun Git Tools
+# export GIT_RERUN_DIR="$HOME/Dropbox/programming/code/git-rerun"
+# [ -s "$GIT_RERUN_DIR/initialize.sh" ] && . "$GIT_RERUN_DIR/initialize.sh"
+
+## Exec Rebase
+# create or edit
+ger() {
+  p=$(git exec-rebase --path)
+  echo "eo $p"
+  if [ -f $p ]; then
+    eo $p
+  else
+    eo $(git exec-rebase)
+  fi
+}
+# update
+geru() {
+  p=$(git exec-rebase --path)
+  cp $p "$p.backup" 2> /dev/null
+  echo "eo $p"
+  eo $(git exec-rebase)
+}
+# new (delete previous rebase file)
+gern() {
+  p=$(git exec-rebase --path)
+  cp $p "$p.backup" 2> /dev/null
+  rm -rf $p
+  echo "eo $p"
+  eo $(git exec-rebase)
+}
+# run (or create if rebase file doesn't exist)
+gerr() {
+  p=$(git exec-rebase --path)
+  if [ -f $p ]; then
+    git log --oneline -15
+    git reset --hard $(git merge-base origin/master HEAD)
+    git clean -fd
+    . $p
+  else
+    echo "eo $p"
+    eo $(git exec-rebase)
+  fi
+}
+# continue (after resolving cherry-pick conflics)
+gerc() {
+  . $(git exec-rebase --continue)
+}
+# create tmp rebase file
+gert() {
+  p1=$(git exec-rebase --path)
+  p2=$(git exec-rebase --name 'tmp.sh' --path)
+  cp $p1 "$p2.backup" 2> /dev/null
+  git exec-rebase
+  cp $p1 $p2
+  cp "$p2.backup" $p1 2> /dev/null
+  echo "eo $p2"
+  eo $p2
+}
 
 # git completion
 source ~/.bashrc.d/sugarman/git-completion.bash

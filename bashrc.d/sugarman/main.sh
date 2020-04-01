@@ -14,6 +14,19 @@ function rp() {
   realpath --relative-to=$(pwd) $1
 }
 
+# run relative path on clipboard, and save
+function rpc() {
+  echo $(rp $(pbpaste)) | pbcopy
+  echo $(pbpaste)
+}
+
+function restart-touchbar() {
+  pkill "Touch Bar agent"
+  killall "ControlStrip"
+}
+# touch-bar-sucks
+alias tbs="restart-touchbar"
+
 # refresh codesearch cindex
 function csr() {
   cd ~
@@ -109,10 +122,10 @@ function rgie() {
 
 # Save bash history
 unset HISTFILESIZE
-HISTSIZE=3000
-PROMPT_COMMAND="history -a"
-export HISTSIZE PROMPT_COMMAND
-shopt -s histappend
+export HISTSIZE=3000
+# bellow lines are included in Git Rerun Tools
+# export PROMPT_COMMAND="history -a"
+# shopt -s histappend
 
 # bash completion for mac ports
 if [ -f /opt/local/etc/bash_completion ]; then
@@ -172,7 +185,7 @@ function rgf() {
 alias b="bash"
 # emacs open in daemon
 function eo() {
-  emacsclient "$1" &
+  emacsclient "$@" &
 }
 # emacs quick desktop
 function ed() {
@@ -180,7 +193,7 @@ function ed() {
 }
 # start emacs server
 alias ec="emacsclient"
-alias ek="ec -e '(kill-emacs)'"
+alias ekill="ec -e '(kill-emacs)'"
 alias es="ek; emacs --daemon; ec"
 alias e="emacs -nw --no-desktop"
 alias eq="emacs -nw -q -l ~/.emacs.d/sugarman/simple.el"
@@ -289,8 +302,13 @@ function skill() {
   sudo kill -9 $(pgrep $1)
 }
 
+# get last modified item
+function lsl() {
+ ls -ltr | tail -n1 | rg '\S+$' -o
+}
+
 # node
-alias run="npm run --silent"
+alias run="npm run"
 
 # watch src npm run test
 function watch() {

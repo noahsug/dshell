@@ -22,26 +22,42 @@
         ' -
 	ri = rebase -i
         rim = rebase -i origin/master
-	ria = rebase -i --autosquash
+	# ria = rebase -i --autosquash
 	# git rebase -i <merge-base>
 	rib = !sh -c 'git rebase -i $(git merge-base HEAD origin/master)' -
 
 	test = !sh -c 'echo $1 $1 $1' -
 	re = !sh -c '\
 	  x=$(([ -z $1 ] && echo 0) || echo $1) && \
-	  git reset --hard HEAD~$x && git clean -fd' -
-	reb = !sh -c 'git reset --hard $(git merge-base origin/master HEAD) && git clean -fd' -
-	res = !sh -c 'git reset HEAD~$1' -
-	resb = !sh -c 'git reset $(git merge-base origin/master HEAD)' -
+	  git reset --hard HEAD~$x && \
+          git clean -fd \
+        ' -
+	reb = !sh -c '\
+          git log --oneline -15 && \
+          git reset --hard $(git merge-base origin/master HEAD) && \
+          git clean -fd \
+        ' -
+	res = !sh -c 'git reset HEAD~$1 ' -
+	resb = !sh -c '\
+          git log --oneline -15 && \
+          git reset $(git merge-base origin/master HEAD) \
+        ' -
         reh = reset --hard
 
-	cm = commit
+        cm = commit
+        # commit rename
+        cmr = commit --amend -m
+        # commit all
 	ca = commit -am
+        # commit all rename
+        car = commit --amend -am
+        # commit all using bash history command for the commit message
+        cah = commit-history
 
 	co = checkout
 	com = checkout master
-        # rebase on top of origin/master by cherry-picking changes
-        # git rbcp my-branch, then check out the branch (see rbcp)
+        # check out rebased branch, (done by cherry-picking changes on top of origin/master)
+        # git corb branch-to-checkout
         corb = !sh -c '\
           git branch > /dev/null && \
           git checkout origin/master 2>/dev/null && \
@@ -56,17 +72,20 @@
 
 	cp = cherry-pick
 	cpc = cherry-pick --continue
+        cpt = cherry-pick --strategy=recursive -X theirs
 	# cherry-pick branch
         cpb = !sh -c 'git cherry-pick $(git merge-base $1 origin/master)..$1 -n && git commit -am $1' -
 
 	di = diff
 	diq = diff --name-only
-	dib = !sh -c 'git diff $(git merge-base origin/master HEAD)' -
-	dibq = !sh -c 'git diff --name-only $(git merge-base HEAD origin/master)' -
-	dim = !sh -c 'git diff origin/master' -
-	dimq = !sh -c 'git diff --name-only origin/master' -
+	dib = !sh -c 'git diff $(git merge-base origin/master HEAD) $@' -
+	dibq = !sh -c 'git diff --name-only $(git merge-base HEAD origin/master) $@' -
+	dim = diff origin/master
+	dimq = diff --name-only origin/master
 
 	st = status
+        # faster, but excludes untracked files
+        stf = status -uno
 
 	ft = fetch
 	ftm = fetch origin master
@@ -80,6 +99,14 @@
 	    git checkout $b \
 	  )) \
 	' -
+        # fetch branch
+	ftb = !sh -c '\
+	  b=$(git symbolic-ref --short HEAD) && \
+	  git fetch origin $b' -
+        # fetch and rebase branch
+	frb = !sh -c '\
+	  b=$(git symbolic-ref --short HEAD) && \
+	  git fetch origin $b && git rebase origin/$b' -
 	# fetch and rebase and export
 	fre = !sh -c '\
 	  b=$(git symbolic-ref --short HEAD) && \
@@ -154,16 +181,27 @@
         ' -
 
 	# git fix
-	f = !sh -c 'git add . && git commit --fixup HEAD' -
+	f = !sh -c '\
+          git branch > /dev/null && \
+          sha=$(([ -z $1 ] && echo "HEAD") || echo $1) && \
+          git add . && git commit --fixup $sha \
+        ' -
 	# git fix, but manually add files
-	fm = !sh -c 'git commit --fixup HEAD' -
-	# git fix, but append to previous commit
-	fa = !sh -c 'git add . && git commit --amend -C HEAD' -
+	fm = !sh -c '\
+          git branch > /dev/null && \
+          sha=$(([ -z $1 ] && echo "HEAD") || echo $1) && \
+          git commit --fixup $sha \
+        ' -
 	# git fix, but manually add files and append to previous commit
 	fma = !sh -c 'git commit --amend -C HEAD' -
-	# git fix, then export
-	fe = !sh -c 'git add . && git commit --fixup HEAD && git push --force' -
-	# git fix ammend, then export
+
+	# git fix, but append to previous commit
+	fa = !sh -c 'git add . && git commit --amend -C HEAD' -
+        # git fix, but smartly append to similar commit
+	fas = !sh -c 'git add . && git rebase-commit-amend $@' -
+        # git fix, but smartly append to the given sha
+	fash = !sh -c 'git add . && git rebase-commit-amend --sha $@' -
+	# git fix amend, then export
 	fae = !sh -c 'git add . && git commit --amend -C HEAD && git push --force' -
 [color]
 	ui = auto
@@ -182,3 +220,5 @@
 	enabled = true
 [hub]
 	host = git.musta.ch
+[rebase]
+	autosquash = true
